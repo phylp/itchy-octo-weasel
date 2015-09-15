@@ -9,6 +9,10 @@ logRoute.get('/test', function(req, res){
   res.end();
 });
 
+logRoute.get('findstuff', function(req,res){
+  Log.find()
+})
+
 logRoute.post('/test1', jsonParser, function(req, res){
   var newLog = new Log(req.body);
   newLog.save(function(err, data){
