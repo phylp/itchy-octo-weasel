@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "body-parser": "^1.13.3",
-    "mongoose": "^4.1.7"
+    "mongoose": "^4.1.7",
+    "mongoose-validate": "git://github.com/RGBboy/mongoose-validate.git"
   }
 }

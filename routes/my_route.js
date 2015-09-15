@@ -29,7 +29,7 @@ logRoute.post('/sendstuff', jsonParser, function(req, res){
   var newLog = new Log(req.body);
   newLog.save(function(err, data){
     if(err){
-      console.log(err);
+      console.log('shit ' + err);
       res.end();
     } else {
       res.json(data);
