@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/logs2');
+mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/fast_food_log');
 
 var logRouter = require(__dirname + '/routes/my_route');
 app.use('/logger', logRouter);

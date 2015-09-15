@@ -21,10 +21,10 @@ describe('the models resource', function(done){
   it('should be able to create a log', function(done){
     chai.request(url)
     .post('/sendstuff')
-    .send({name:'james', age: 23})
+    .send({restaurant:'McDonalds', item: 'Big Mac'})
     .end(function(err, res){
-      expect(res.body.name).to.eql('james');
-      expect(res.body.age).to.eql(23);
+      expect(res.body.restaurant).to.eql('McDonalds');
+      expect(res.body.item).to.eql('Big Mac');
       done();
     });
   });

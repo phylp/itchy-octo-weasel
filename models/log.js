@@ -1,8 +1,9 @@
 var mongoose = require('mongoose');
 
 var logSchema = new mongoose.Schema({
-  name: String,
-  age: {type: Number, min: 18}
+  restaurant: String,
+  item: String,
+  date: {type: Date, default: Date.now}
 });
 
-module.exports = mongoose.model('Log', logSchema);
+module.exports = mongoose.model('FoodLog', logSchema);
