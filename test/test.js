@@ -7,12 +7,13 @@ require(__dirname + '/../server.js');
 var mongoose = require('mongoose');
 var url = 'localhost:3000/logger';
 var Log = require(__dirname + '/../models/log');
+var errorHandle = require(__dirname + '/../lib/error_handle')
 
 describe('the models resource', function(done){
   after(function(done){
     mongoose.connection.db.dropDatabase(function(err){
       if(err){
-        throw err;
+        errorHandle(err);
       } else {
         done();
       }
@@ -35,6 +36,5 @@ describe('the models resource', function(done){
       expect(res).to.not.eql(null);
       done();
     })
-
   })
 });

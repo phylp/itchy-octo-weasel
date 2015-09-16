@@ -11,16 +11,6 @@ logRoute.get('/test', function(req, res){
   res.end();
 });   
 
-logRoute.get('/showlogs', function(req,res){
-  Log.find({}, function(err, data){
-    if(err){
-      return errorHandle(err, res);
-    }
-    console.log('success!')
-    res.json(data);
-  });
-});
-
 logRoute.post('/test1', jsonParser, function(req, res){
   var newLog = new Log(req.body);
   newLog.save(function(err, data){
@@ -30,6 +20,16 @@ logRoute.post('/test1', jsonParser, function(req, res){
     } else {
       res.json(data);
     }
+  });
+});
+
+logRoute.get('/showlogs', function(req,res){
+  Log.find({}, function(err, data){
+    if(err){
+      return errorHandle(err, res);
+    }
+    console.log('success!')
+    res.json(data);
   });
 });
 
@@ -46,8 +46,7 @@ logRoute.post('/send', jsonParser, function(req, res){
   var newLog = new Log(req.body);
   newLog.save(function(err, data){
     if(err){
-      console.log('shit ' + err);
-      res.json(data);
+      errorHandle(err);
     } else {
       res.json(data);
     }
