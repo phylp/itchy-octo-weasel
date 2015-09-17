@@ -33,6 +33,16 @@ logRoute.get('/showlogs', function(req,res){
   });
 });
 
+logRoute.get('/showitems/:id', function(req, res){
+  Log.find({_id: req.params.id}, function(err, data){
+    if(err){
+      return errorHandle(err);
+    }
+    console.log('works'); 
+    res.json(data);
+  });
+});
+
 logRoute.delete('/:id', function(req,res){
   Log.remove({_id: req.params.id}, function(err){
     if(err){
@@ -52,3 +62,15 @@ logRoute.post('/send', jsonParser, function(req, res){
     }
   });
 });
+
+
+logRoute.get('/showfavres', function(req, res){
+  var raw = Log.find({restaurant: 'mcdons'}, function(err, data){
+    if(err){errorHandle(err);
+    } else {
+      var x = data.filter(function(thing){return thing.item === 'friez'});
+      res.json(x);
+    }
+  });
+});  
+
