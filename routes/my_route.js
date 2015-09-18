@@ -5,40 +5,20 @@ var errorHandle = require(__dirname + '/../lib/error_handle');
 
 var logRoute = module.exports = exports = express.Router();
 
-logRoute.get('/test', function(req, res){
-  console.log('hey it works so far');
-  res.send('test works');
-  res.end();
-});   
-
-logRoute.post('/test1', jsonParser, function(req, res){
-  var newLog = new Log(req.body);
-  newLog.save(function(err, data){
-    if(err){
-      console.log(err);
-      res.end();
-    } else {
-      res.json(data);
-    }
-  });
-});
-
 logRoute.get('/showlogs', function(req,res){
   Log.find({}, function(err, data){
     if(err){
       return errorHandle(err, res);
     }
-    console.log('success!')
     res.json(data);
   });
 });
 
-logRoute.get('/showitems/:id', function(req, res){
+logRoute.get('/showlog/:id', function(req, res){
   Log.find({_id: req.params.id}, function(err, data){
     if(err){
       return errorHandle(err);
-    }
-    console.log('works'); 
+    } 
     res.json(data);
   });
 });
@@ -63,14 +43,51 @@ logRoute.post('/send', jsonParser, function(req, res){
   });
 });
 
-
-logRoute.get('/showfavres', function(req, res){
-  var raw = Log.find({restaurant: 'mcdons'}, function(err, data){
+logRoute.get('/showres/:id', function(req, res){
+  var raw = Log.find({restaurant: req.params.id}, function(err, data){
     if(err){errorHandle(err);
     } else {
-      var x = data.filter(function(thing){return thing.item === 'friez'});
-      res.json(x);
+      res.json(data);
     }
   });
-});  
+});
 
+logRoute.get('/showitem/:id', function(req, res){
+  Log.find({item: req.params.id}, function(err, data){
+    if(err){errorHandle(err);
+    } else {
+      var itemDates = '';
+      data.forEach(function(item){
+        itemDates += item.date + '\n';
+      });
+      res.json('\n' + req.params.id + '\n' + itemDates);
+    }
+  });
+}); 
+
+logRoute.get('/showfavorite', function(req,res){
+  Log.find({}, function(err, data){
+    var resMap = {};
+    if(err){
+      errorHandle(err)
+    } else {
+      data.forEach(function(item){
+        if(resMap[item['restaurant']]){
+          resMap[item['restaurant']]++;
+        } else {
+          resMap[item['restaurant']] = 1;
+        }
+      })       
+    }
+    var favorite;
+    var greatest = 0;
+    console.log(resMap);
+    for(var key in resMap){
+      if(resMap[key] > greatest){
+        greatest = resMap[key];
+        favorite = key;
+      }
+    }
+    res.send(favorite);
+  })
+})   
