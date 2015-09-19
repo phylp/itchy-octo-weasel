@@ -79,15 +79,15 @@ logRoute.get('/showfavorite', function(req,res){
         }
       })       
     }
-    var favorite;
-    var greatest = 0;
-    console.log(resMap);
-    for(var key in resMap){
-      if(resMap[key] > greatest){
-        greatest = resMap[key];
-        favorite = key;
+      var favorite;
+      var greatest = 0;
+      console.log(resMap);
+      for(var key in resMap){
+        if(resMap[key] > greatest){
+          greatest = resMap[key];
+          favorite = key;
+        }
       }
-    }
-    res.send(favorite);
+      res.send(favorite);
   })
 })   
