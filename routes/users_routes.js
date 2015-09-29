@@ -45,16 +45,16 @@ ee.on('generateToken', function(newUser, req, res){
 });
 
 /* ======================== SIGN IN ======================== */
+var user;
 
 usersRouter.get('/signin', httpBasic, function(req, res){
   User.findOne({'basic.username': req.auth.username}, function(err, user){
-    if(err){
-      return errorHandle(err, res);
-    }
+    if(err) return errorHandle(err, res);
     if(!user){
       console.log('could not authenticate: ' + req.auth.username);
       return res.status(401).json({msg: 'could not authenticate'});
     }
+    console.log('got here');
    ee.emit('compareHash', req, res, user); 
   });
 });
@@ -73,7 +73,66 @@ ee.on('generateToken2', function(req, res, user){
   user.generateToken(function(err, token){
     if(err){
       return errorHandle(err, res);
-      res.json({token: token});
     }
+    res.json({token: token});
   });
 });
+
+// usersRouter.get('/signin', httpBasic, function(req, res) {
+//   User.findOne({'basic.username': req.auth.username}, function(err, user) {
+//     if (err) return errorHandle(err, res);
+
+//     if (!user) {
+//       console.log('could not authenticat: ' + req.auth.username);
+//       return res.status(401).json({msg: 'could not authenticat'});
+//     }
+
+//     user.compareHash(req.auth.password, function(err, hashRes) {
+//       if (err) return errorHandle(err, res);
+//       if (!hashRes) {
+//         console.log('could not authenticat: ' + req.auth.username);
+//         return res.status(401).json({msg: 'authenticat says no!'});
+//       }
+
+//       user.generateToken(function(err, token) {
+//         if (err) return errorHandle(err, res);
+//         res.json({token: token});
+//       });
+//     });
+//   });
+// });
+
+// var user;
+
+// usersRouter.get('/signin', httpBasic, function(req, res) {
+//   ee.emit('findOne', req, res, user);
+// });
+
+// ee.on('findOne', function(req, res, user){
+//   User.findOne({'basic.username': req.auth.username}, function(err, user) {
+//     if (err) return errorHandle(err, res);
+//     if (!user) {
+//       console.log('could not authenticat: ' + req.auth.username);
+//       return res.status(401).json({msg: 'could not authenticat'});
+//     }
+//     ee.emit('compareHashAgain', req, res, user)
+//   });
+// });
+
+// ee.on('compareHashAgain', function(req, res, user){
+//   user.compareHash(req.auth.password, function(err, hashRes) {
+//     if (err) return errorHandle(err, res);
+//     if (!hashRes) {
+//       console.log('could not authenticat: ' + req.auth.username);
+//       return res.status(401).json({msg: 'authenticat says no!'});
+//     }
+//     ee.emit('generateToken', req, res, user);
+//   });
+// });
+
+// ee.on('generateToken', function(req, res, user){
+//   user.generateToken(function(err, token) {
+//     if (err) return errorHandle(err, res);
+//     res.json({token: token});
+//   });
+// });

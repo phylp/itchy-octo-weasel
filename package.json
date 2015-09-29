@@ -11,9 +11,12 @@
   "devDependencies": {
     "chai": "^3.2.0",
     "chai-http": "^1.0.0",
-    "mocha": "^2.3.2"
+    "gulp": "^3.9.0",
+    "mocha": "^2.3.2",
+    "webpack-stream": "^2.1.1"
   },
   "dependencies": {
+    "angular": "^1.4.6",
     "body-parser": "^1.13.3",
     "mongoose": "^4.1.7",
     "mongoose-validate": "git://github.com/RGBboy/mongoose-validate.git"

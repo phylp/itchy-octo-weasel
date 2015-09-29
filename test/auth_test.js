@@ -35,7 +35,7 @@ describe('auth', function(){
   it('should be able to create user', function(done){
     chai.request('localhost:3000/logger')
       .post('/signup')
-      .send({username: 'testuser2', password: 'testpw'})
+      .send({username: 'test', password: 'foobar'})
       .end(function(err, res){
         expect(err).to.eql(null);
         expect(res.body.token).to.have.length.above(0);
@@ -43,12 +43,12 @@ describe('auth', function(){
       });
   });
 
-  describe('user already in DB', function(){
+  describe('check if user already in DB', function(){
     before(function(done){
       var user = new User();
-      user.username = 'test2';
-      user.basic.username = 'test2';
-      user.generateHash('testing555', function(err, res){
+      user.username = 'test1';
+      user.basic.username = 'test1';
+      user.generateHash('foobar', function(err, res){
         if(err) throw err;
         user.save(function(err,data){
           if(err) throw err;
@@ -64,12 +64,12 @@ describe('auth', function(){
     it('should be able to sign in', function(done){
       chai.request('localhost:3000/logger')
       .get('/signin')
-      .auth('/test', 'testing555')
+      .auth('test1', 'foobar')
       .end(function(err, res){
         expect(err).to.eql(null);
         expect(res.body.token).to.have.length.above(0);
+        done();
       })
-      done();
     });
   });
 })
