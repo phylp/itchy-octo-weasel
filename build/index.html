@@ -1,12 +1,49 @@
 <!DOCTYPE html>
+
 <html>
   <head>
+    <style>
+      * {
+        font-family: Arial;
+      }
+    </style>
   </head>
   <body data-ng-app = "foodApp">
-    <main data-ng-controller = "foodController">
-      <h1>THE TEST OF WEBPACK</h1>
-      <h2> {{ greeting }} </h2>
-      <input type = "text" data-ng-model = "greeting">
+    <main data-ng-controller = "LogsController" data-ng-init = "getAll();">
+      <h1>Fast Food Logs. So Sad.</h1>
+      
+
+      <form name = "newLogForm" data-ng-submit = "makeLog(newLog)">
+        <label for "restaurant">New Log:
+          <input type = "text" placeholder = "restaurant" required data-ng-model = "newLog.restaurant">
+           <input type = "text" placeholder = "item" required data-ng-model = "newLog.item">
+        </label>
+        <button type = "submit" data-ng-disabled = "newLogForm.$invalid">Make New Log</button>
+      </form>
+
+      <br/>
+
+    
+
+      <ul>
+        <li data-ng-repeat = "log in logs">
+          <div data-ng-if = "!log.editing">{{log.restaurant}}, {{log.item}}
+            <button data-ng-click = "log.editing = true">Edit</button>
+            <button data-ng-click = removeLog(log)>Delete</button>
+          </div>
+          <form data-ng-if = "log.editing" name = "{{'newLogForm' + log._id}}" data-ng-submit = "updateLog(log)">
+            <input type = "text" data-ng-model = "log.restaurant">
+            <input type = "text" data-ng-model = "log.item">
+            <button type = "submit">SAVE</button>
+          </form> 
+          <button data-ng-if = 'log.editing' data-ng-click = "log.editing = false">CANCEL</button> 
+        </li>
+
+      </ul>
+
+
+
+
     </main>
     <script src = "bundle.js"></script>
   </body>

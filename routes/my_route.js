@@ -23,26 +23,6 @@ logRoute.get('/showlog/:id', function(req, res){
   });
 });
 
-logRoute.delete('/:id', function(req,res){
-  Log.remove({_id: req.params.id}, function(err){
-    if(err){
-      return errorHandle(err, res);
-    }
-    res.json({msg: 'sucessfully deleted'});
-  });
-});
-
-logRoute.post('/send', jsonParser, function(req, res){
-  var newLog = new Log(req.body);
-  newLog.save(function(err, data){
-    if(err){
-      errorHandle(err);
-    } else {
-      res.json(data);
-    }
-  });
-});
-
 logRoute.get('/showres/:id', function(req, res){
   var raw = Log.find({restaurant: req.params.id}, function(err, data){
     if(err){errorHandle(err);
@@ -91,3 +71,37 @@ logRoute.get('/showfavorite', function(req,res){
       res.send(favorite);
   })
 })   
+
+logRoute.put('/update', jsonParser, function(req, res){
+  Log.findOne({_id: req.body._id}, function(err, log){
+    if(err) errorHandle(err);
+    if(!!req.body.restaurant) log.restaurant = req.body.restaurant;
+    if(!!req.body.item) log.item = req.body.item;
+    log.save(function(err, data){
+      if(err){
+        errorHandle(err);
+      }
+      res.json(log);
+    })
+  })
+});
+
+logRoute.post('/send', jsonParser, function(req, res){
+  var newLog = new Log(req.body);
+  newLog.save(function(err, data){
+    if(err){
+      errorHandle(err);
+    } else {
+      res.json(data);
+    }
+  });
+});
+
+logRoute.delete('/:id', function(req,res){
+  Log.remove({_id: req.params.id}, function(err){
+    if(err){
+      return errorHandle(err, res);
+    }
+    res.json({msg: 'sucessfully deleted'});
+  });
+});

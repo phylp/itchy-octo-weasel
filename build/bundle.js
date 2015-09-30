@@ -45,12 +45,9 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__ (1);
-
 	var foodApp = angular.module('foodApp', []);
+	__webpack_require__(2)(foodApp);
 
-	foodApp.controller('foodController', ['$scope', function($scope){
-	  $scope.greeting = 'hello world';
-	}]);
 
 
 /***/ },
@@ -28961,6 +28958,64 @@
 	})(window, document);
 
 	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app){
+	  __webpack_require__(3)(app);
+	};
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
+	  app.controller('LogsController', ['$scope', '$http', function($scope, $http){
+	    $scope.logs = [];
+
+	    $scope.getAll = function(){
+	      $http.get('/logger/showlogs')
+	      .then(function(res){
+	        $scope.logs = res.data; 
+	      }, function(res){
+	        console.log(res)
+	      });
+	    };
+
+	    $scope.makeLog = function(log){
+	      $http.post('/logger/send', log)
+	      .then(function(res){
+	        $scope.logs.push(res.data);
+	        $scope.newLog = null;
+	      },function(res){
+	        console.log(res) // in case of err
+	      });
+	    };
+
+	    $scope.updateLog = function(log){
+	      $http.put('/logger/update', log)
+	      .then(function(res){
+	        $scope.logs.push(res.data);
+	        log.editing = false;
+	        $scope.updateLog = null;
+	      }, function(res){
+	        console.log(res)
+	      });
+	    };
+
+	    $scope.removeLog = function(log){
+	      $http.delete('/logger/' + log._id, log)
+	      .then(function(){
+	        $scope.logs.splice($scope.logs.indexOf(log), 1);
+	      }, function(res){
+	        console.log('unable to remove note at this time')
+	      });
+	    };
+
+	  }]);
+	};
 
 /***/ }
 /******/ ]);

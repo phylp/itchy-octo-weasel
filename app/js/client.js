@@ -1,7 +1,4 @@
 require ('angular/angular');
-
 var foodApp = angular.module('foodApp', []);
+require('./logs/logs')(foodApp);
 
-foodApp.controller('foodController', ['$scope', function($scope){
-  $scope.greeting = 'hello world';
-}]);
