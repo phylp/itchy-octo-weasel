@@ -6,12 +6,14 @@
       * {
         font-family: Arial;
       }
+      thead, td {
+        padding: 1em;
+      }
     </style>
   </head>
   <body data-ng-app = "foodApp">
     <main data-ng-controller = "LogsController" data-ng-init = "getAll();">
-      <h1>Fast Food Logs. So Sad.</h1>
-      
+      <h1>Fast Food Logs.</h1>
 
       <form name = "newLogForm" data-ng-submit = "makeLog(newLog)">
         <label for "restaurant">New Log:
@@ -22,10 +24,33 @@
       </form>
 
       <br/>
+      
+      <table>
+        <thead>
+          <tr style = "font-weight: bold; text-align: center;">
+            <td>Restaurant</td>
+            <td>Item</td>
+            <td>Date</td>
+          </tr>
+          <tr data-ng-repeat = "log in logs">
+            <td data-ng-if = "!log.editing">{{log.restaurant}}</td> 
+            <td data-ng-if = "!log.editing">{{log.item}}</td>
+            <td data-ng-if = "!log.editing">{{log.date | date: 'mediumDate'}}</td>
+            <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.restaurant"></td>
+            <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.item"></td>
+            <td>
+              <button data-ng-if = "!log.editing" data-ng-click = "log.editing = true">Edit/Delete</button>
+              <button data-ng-if = "log.editing" data-ng-click = "updateLog(log)">Save</button>
+              <button data-ng-if = "log.editing" data-ng-click = removeLog(log)>Delete</button>
+              <button data-ng-if = 'log.editing' data-ng-click = "cancelEdit(log)">CANCEL</button> 
+            </td>
+          </tr>  
+        </thead>
+        
 
-    
-
-      <ul>
+      </table>
+      
+<!--       <ul>
         <li data-ng-repeat = "log in logs">
           <div data-ng-if = "!log.editing">{{log.restaurant}}, {{log.item}}
             <button data-ng-click = "log.editing = true">Edit</button>
@@ -36,10 +61,9 @@
             <input type = "text" data-ng-model = "log.item">
             <button type = "submit">SAVE</button>
           </form> 
-          <button data-ng-if = 'log.editing' data-ng-click = "log.editing = false">CANCEL</button> 
+          <button data-ng-if = 'log.editing' data-ng-click = "cancelEdit(log)">CANCEL</button> 
         </li>
-
-      </ul>
+      </ul> -->
 
 
 

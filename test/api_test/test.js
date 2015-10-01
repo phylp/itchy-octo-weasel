@@ -3,7 +3,7 @@ var chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 var expect = chai.expect;
 process.env.MONGO_URL = 'mongodb://localhost/fast_food_log';
-require(__dirname + '/../server.js');
+require(process.env.PWD + '/server.js');
 var mongoose = require('mongoose');
 var url = 'localhost:3000/logger';
 var Log = require(__dirname + '/../models/log');

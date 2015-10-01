@@ -21,12 +21,16 @@ module.exports = function(app){
       });
     };
 
+    var oldRestaurant;
+    var oldItem;
+
     $scope.updateLog = function(log){
+      oldRestaurant = log.restaurant;
+      oldItem = log.item;
       $http.put('/logger/update', log)
       .then(function(res){
         $scope.logs.push(res.data);
-        log.editing = false;
-        $scope.updateLog = null;
+        $scope.logs.splice($scope.logs.indexOf(log), 1); //trial
       }, function(res){
         console.log(res)
       });
@@ -40,6 +44,12 @@ module.exports = function(app){
         console.log('unable to remove note at this time')
       });
     };
+
+    $scope.cancelEdit = function(log){
+      log.restaurant = oldRestaurant;
+      log.item = oldItem;
+      log.editing = false;
+    }
 
   }]);
 };
