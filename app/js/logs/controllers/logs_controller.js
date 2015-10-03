@@ -29,8 +29,8 @@ module.exports = function(app){
       oldItem = log.item;
       $http.put('/logger/update', log)
       .then(function(res){
-        $scope.logs.push(res.data);
         $scope.logs.splice($scope.logs.indexOf(log), 1); //trial
+        $scope.logs.push(res.data);
       }, function(res){
         console.log(res)
       });

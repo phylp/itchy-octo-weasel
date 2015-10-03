@@ -4,10 +4,9 @@ var mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/fast_food_log');
 process.env.APP_SECRET = process.env.APP_SECRET || 'changemechangemechangeme';
 
-
+app.use(express.static(__dirname + '/build'));
 var logRouter = require(__dirname + '/routes/my_route');
 app.use('/logger', logRouter);
-app.use(express.static(__dirname + '/build'));
 
 var userRouter = require(__dirname + '/routes/users_routes');
 app.use('/logger', userRouter);
