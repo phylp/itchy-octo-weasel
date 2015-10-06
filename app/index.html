@@ -12,9 +12,9 @@
     </style>
   </head>
   <body data-ng-app = "foodApp">
-    <main data-ng-controller = "LogsController" data-ng-init = "getAll();">
+    <main data-ng-controller   = "LogsController" data-ng-init = "getAll();">
       <h1>Fast Food Logs.</h1>
-
+      <h1>{{ test }}</h1>
       <form name = "newLogForm" data-ng-submit = "makeLog(newLog)">
         <label for "restaurant">New Log:
           <input type = "text" placeholder = "restaurant" required data-ng-model = "newLog.restaurant">

@@ -1,6 +1,8 @@
 module.exports = function(app){
   app.controller('LogsController', ['$scope', '$http', function($scope, $http){
     $scope.logs = [];
+    $scope.test = 'greetings from test';
+
 
     $scope.getAll = function(){
       $http.get('/logger/showlogs')

@@ -46,7 +46,11 @@
 
 	__webpack_require__ (1);
 	var foodApp = angular.module('foodApp', []);
+
+
+	//require('./services/service')(foodApp);
 	__webpack_require__(2)(foodApp);
+	//require('./directives/my-directive');
 
 
 
@@ -28975,6 +28979,8 @@
 	module.exports = function(app){
 	  app.controller('LogsController', ['$scope', '$http', function($scope, $http){
 	    $scope.logs = [];
+	    $scope.test = 'greetings from test';
+
 
 	    $scope.getAll = function(){
 	      $http.get('/logger/showlogs')
