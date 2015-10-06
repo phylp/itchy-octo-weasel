@@ -50,10 +50,20 @@ describe('logs controller', function(){
     });
 
     it('should be able to modify a log', function(){
-      $httpBackend.expectPUT('/logger/update', {_id: 1, restaurant: 'Taco Bell', item:'Frito Burrito'}).respond(200);
+      $scope.logs[0] = {_id: 1, restaurant: 'Mcdonalds', item:'Fries'};
+      $httpBackend.expectPUT('/logger/update', {_id: 1, restaurant: 'Taco Bell', item:'Frito Burrito'}).respond(200, {_id: 1, restaurant: 'Taco Bell', item:'Frito Burrito'});
       $scope.updateLog({_id: 1, restaurant: 'Taco Bell', item:'Frito Burrito'});
       $httpBackend.flush();
       expect($scope.logs.length).toBe(1);
+      expect($scope.logs[0].restaurant).toBe('Taco Bell');
+    });
+
+    it('should be able to delete a log', function(){
+      $scope.logs.push({_id: 727, restaurant: 'Hardees', item: 'coke'});
+      $httpBackend.expectDELETE('/logger/727').respond(200);
+      $scope.removeLog({_id: 727, restaurant: 'Hardees', item: 'coke'});
+      $httpBackend.flush();
+      expect($scope.logs.length).toBe(0);
     })
 
   }); 

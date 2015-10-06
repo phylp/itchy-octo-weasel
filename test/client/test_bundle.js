@@ -104,10 +104,20 @@
 	    });
 
 	    it('should be able to modify a log', function(){
-	      $httpBackend.expectPUT('/logger/update', {_id: 1, restaurant: 'Taco Bell', item:'Frito Burrito'}).respond(200);
+	      $scope.logs[0] = {_id: 1, restaurant: 'Mcdonalds', item:'Fries'};
+	      $httpBackend.expectPUT('/logger/update', {_id: 1, restaurant: 'Taco Bell', item:'Frito Burrito'}).respond(200, {_id: 1, restaurant: 'Taco Bell', item:'Frito Burrito'});
 	      $scope.updateLog({_id: 1, restaurant: 'Taco Bell', item:'Frito Burrito'});
 	      $httpBackend.flush();
 	      expect($scope.logs.length).toBe(1);
+	      expect($scope.logs[0].restaurant).toBe('Taco Bell');
+	    });
+
+	    it('should be able to delete a log', function(){
+	      $scope.logs.push({_id: 727, restaurant: 'Hardees', item: 'coke'});
+	      $httpBackend.expectDELETE('/logger/727').respond(200);
+	      $scope.removeLog({_id: 727, restaurant: 'Hardees', item: 'coke'});
+	      $httpBackend.flush();
+	      expect($scope.logs.length).toBe(0);
 	    })
 
 	  }); 
@@ -130,7 +140,10 @@
 
 	__webpack_require__ (3);
 	var foodApp = angular.module('foodApp', []);
+
 	__webpack_require__(4)(foodApp);
+	//require('./services/service')(foodApp);
+	//require('./directives/my-directive');
 
 
 
@@ -29073,7 +29086,7 @@
 	      $http.post('/logger/send', log)
 	      .then(function(res){
 	        $scope.logs.push(res.data);
-	        $scope.newLog = null;
+	        //$scope.newLog = null;
 	      },function(res){
 	        console.log(res) // in case of err
 	      });
@@ -29099,7 +29112,7 @@
 	      .then(function(){
 	        $scope.logs.splice($scope.logs.indexOf(log), 1);
 	      }, function(res){
-	        console.log('unable to remove note at this time')
+	        console.log('unable to remove log')
 	      });
 	    };
 

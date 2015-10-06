@@ -15,7 +15,7 @@ module.exports = function(app){
       $http.post('/logger/send', log)
       .then(function(res){
         $scope.logs.push(res.data);
-        $scope.newLog = null;
+        //$scope.newLog = null;
       },function(res){
         console.log(res) // in case of err
       });
@@ -41,7 +41,7 @@ module.exports = function(app){
       .then(function(){
         $scope.logs.splice($scope.logs.indexOf(log), 1);
       }, function(res){
-        console.log('unable to remove note at this time')
+        console.log('unable to remove log')
       });
     };
 
