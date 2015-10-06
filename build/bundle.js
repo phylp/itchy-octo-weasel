@@ -28981,7 +28981,6 @@
 	    $scope.logs = [];
 	    $scope.test = 'greetings from test';
 
-
 	    $scope.getAll = function(){
 	      $http.get('/logger/showlogs')
 	      .then(function(res){
@@ -28992,10 +28991,12 @@
 	    };
 
 	    $scope.makeLog = function(log){
+	      //$scope.logs.push(log);
 	      $http.post('/logger/send', log)
 	      .then(function(res){
-	        $scope.logs.push(res.data);
-	        //$scope.newLog = null;
+	        //$scope.logs.push(res.data);
+	        // $scope.newLog = null;
+	        $scope.getAll();
 	      },function(res){
 	        console.log(res) // in case of err
 	      });
