@@ -11,23 +11,43 @@ var handleFailure = function(callback){
 };
 
 module.exports = function(app){
-  app.factory('Resource', ['$http', function($http){
-    // var resource = function(resourceName){
-    //   this.resource = resourceName;
-    // };
+  app.factory('logfactory', ['$http', function($http){
+    
+    var x = {};
 
-    // Resource.prototype.create = function(resource, callback){
-    //   $http.post('/logger/send', resource)
-    //   .then(handleSuccess(callback), handleFailure(callback));
-    // };
+    x.get = function(callback){
+      $http.get('/logger/showlogs')
+      .then(
+        handleSuccess(callback),    //angular automatically puts response parameter on your callback 
+        handleFailure(callback)   //in case of err
+      );
+    };
 
-    // return function(resourceName){
-    //   return new Resource(resourceName);
-    // }
-    var x = {name: 'phil'};
+    x.make = function(log, callback){
+      $http.post('/logger/send', log)
+      .then(
+        handleSuccess(callback),
+        handleFailure(callback)
+      );
+    };
+
+    x.update = function(log, callback){
+      $http.put('/logger/update', log)
+      .then(
+        handleSuccess(callback),
+        handleFailure(callback)
+      );
+    };
+
+    x.delete = function(log, callback){
+      $http.delete('/logger/' + log._id, log)
+      .then(
+        handleSuccess(callback),
+        handleFailure(callback)
+      );
+    };
+
     return x;
 
   }])
-
-
 }

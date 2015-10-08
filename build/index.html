@@ -12,9 +12,14 @@
     </style>
   </head>
   <body data-ng-app = "foodApp">
-    <main data-ng-controller   = "LogsController" data-ng-init = "getAll();">
+    <main data-ng-controller   = "LogsController" data-ng-init = "getAll()">
       <h1>Fast Food Logs.</h1>
-      <h1>{{ test }}</h1>
+      
+    <!-- 
+    <form name = "testform" data-ng-submit = "test()">
+      <button type = "submit">service test</button>
+    </form>
+ -->
       <form name = "newLogForm" data-ng-submit = "makeLog(newLog)">
         <label for "restaurant">New Log:
           <input type = "text" placeholder = "restaurant" required data-ng-model = "newLog.restaurant">
@@ -39,7 +44,7 @@
             <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.restaurant"></td>
             <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.item"></td>
             <td>
-              <button data-ng-if = "!log.editing" data-ng-click = "log.editing = true">Edit/Delete</button>
+              <button data-ng-if = "!log.editing" data-ng-click = "editDelete(log)">Edit/Delete</button>
               <button data-ng-if = "log.editing" data-ng-click = "updateLog(log)">Save</button>
               <button data-ng-if = "log.editing" data-ng-click = removeLog(log)>Delete</button>
               <button data-ng-if = 'log.editing' data-ng-click = "cancelEdit(log)">CANCEL</button> 

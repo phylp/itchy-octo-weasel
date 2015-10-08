@@ -1,3 +1,3 @@
-modules.exports = function(app){
+module.exports = function(app){
   require('./log_service')(app);
 }

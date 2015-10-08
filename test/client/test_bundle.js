@@ -53,7 +53,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	__webpack_require__(2);
-	__webpack_require__(6);
+	__webpack_require__(8);
 
 
 
@@ -142,8 +142,8 @@
 	var foodApp = angular.module('foodApp', []);
 
 
-	//require('./services/service')(foodApp);
 	__webpack_require__(4)(foodApp);
+	__webpack_require__(6)(foodApp);
 	//require('./directives/my-directive');
 
 
@@ -29063,18 +29063,61 @@
 
 	module.exports = function(app){
 	  __webpack_require__(5)(app);
-	};
-
+	}
 
 /***/ },
 /* 5 */
 /***/ function(module, exports) {
 
+	var handleSuccess = function(callback){
+	  return function(res){
+	    callback(null, res.data);
+	  }
+	};
+
+	var handleFailure = function(callback){
+	  return function(data){
+	    callback(data);
+	  }
+	};
+
 	module.exports = function(app){
-	  app.controller('LogsController', ['$scope', '$http', function($scope, $http){
+	  app.factory('logger', ['$http', function($http){
+	    
+	    var x = {};
+
+	    x.getlogs = function(){
+	      $http.get('/logger/showlogs')
+	      .then(function(res){
+	        handleSuccess(callback), 
+	        handleFailure(callback)
+	      });
+	    };
+	    
+
+	    return function(){
+	      return x;
+	    }
+	  }])
+	}
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app){
+	  __webpack_require__(7)(app);
+	};
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
+	  app.controller('LogsController', ['$scope', 'logger', '$http', function($scope, logger, $http){
 	    $scope.logs = [];
 	    $scope.test = 'greetings from test';
-
 
 	    $scope.getAll = function(){
 	      $http.get('/logger/showlogs')
@@ -29089,7 +29132,8 @@
 	      $http.post('/logger/send', log)
 	      .then(function(res){
 	        $scope.logs.push(res.data);
-	        //$scope.newLog = null;
+	        // $scope.newLog = null;
+	        //$scope.getAll();
 	      },function(res){
 	        console.log(res) // in case of err
 	      });
@@ -29129,7 +29173,7 @@
 	};
 
 /***/ },
-/* 6 */
+/* 8 */
 /***/ function(module, exports) {
 
 	/**

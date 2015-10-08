@@ -1,52 +1,88 @@
 module.exports = function(app){
-  app.controller('LogsController', ['$scope', '$http', function($scope, $http){
+  app.controller('LogsController', ['$scope', 'logfactory', '$http', function($scope, logfactory, $http){
     $scope.logs = [];
-    $scope.test = 'greetings from test';
 
+    // $scope.getAll = function(){
+    //   $http.get('/logger/showlogs')
+    //   .then(function(res){
+    //     $scope.logs = res.data; 
+    //   }, function(res){
+    //     console.log(res)
+    //   });
+    // };
+
+    
     $scope.getAll = function(){
-      $http.get('/logger/showlogs')
-      .then(function(res){
-        $scope.logs = res.data; 
-      }, function(res){
-        console.log(res)
+      logfactory.get(function(err, data){
+        if(err) return console.log(err);
+        $scope.logs = data;
       });
     };
 
+    // $scope.makeLog = function(log){
+    //   $http.post('/logger/send', log)
+    //   .then(function(res){
+    //     $scope.logs.push(res.data);
+    //     // $scope.newLog = null;
+    //     //$scope.getAll();
+    //   },function(res){
+    //     console.log(res) // in case of err
+    //   });
+    // };
+
     $scope.makeLog = function(log){
-      //$scope.logs.push(log);
-      $http.post('/logger/send', log)
-      .then(function(res){
-        //$scope.logs.push(res.data);
-        // $scope.newLog = null;
-        $scope.getAll();
-      },function(res){
-        console.log(res) // in case of err
+      logfactory.make(log, function(err, data){
+        if(err) return console.log(err);
+        $scope.logs.push(data);
+        log.restaurant = '';
+        log.item = '';
       });
     };
 
     var oldRestaurant;
     var oldItem;
 
-    $scope.updateLog = function(log){
+    $scope.editDelete = function(log){
       oldRestaurant = log.restaurant;
       oldItem = log.item;
-      $http.put('/logger/update', log)
-      .then(function(res){
-        $scope.logs.splice($scope.logs.indexOf(log), 1); //trial
-        $scope.logs.push(res.data);
-      }, function(res){
-        console.log(res)
-      });
+      log.editing = true;
+    }
+
+    // $scope.updateLog = function(log){
+    //   $http.put('/logger/update', log)
+    //   .then(function(res){
+    //     var index = $scope.logs.indexOf(log);
+    //     $scope.logs.splice($scope.logs[index], 1, res.data); //keeps data in same place
+    //     log.editing = false;
+    //   }, function(res){
+    //     console.log(res)
+    //   });
+    // };
+
+    $scope.updateLog = function(log){
+      logfactory.update(log, function(err, res){
+        if(err) return console.log(err);
+        var index = $scope.logs.indexOf(log);
+        $scope.logs.splice($scope.logs[index], 1, res);
+        log.editing = false;
+      }); 
     };
 
+    // $scope.removeLog = function(log){
+    //   $http.delete('/logger/' + log._id, log)
+    //   .then(function(){
+    //     $scope.logs.splice($scope.logs.indexOf(log), 1);
+    //   }, function(res){
+    //     console.log('unable to remove log')
+    //   });
+    // };
+
     $scope.removeLog = function(log){
-      $http.delete('/logger/' + log._id, log)
-      .then(function(){
-        $scope.logs.splice($scope.logs.indexOf(log), 1);
-      }, function(res){
-        console.log('unable to remove log')
-      });
-    };
+      logfactory.delete(log, function(err, res){
+        if(err) return console.log(err);
+        $scope.logs.splice($scope.logs.indexOf(log),1);
+      })
+    }
 
     $scope.cancelEdit = function(log){
       log.restaurant = oldRestaurant;

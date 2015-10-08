@@ -92,8 +92,8 @@ logRoute.post('/send', jsonParser, function(req, res){
     if(err){
       errorHandle(err);
     } else {
-      //res.json(data)
-      res.end();
+      res.json(data)
+      //res.end();
     }
   });
 });
