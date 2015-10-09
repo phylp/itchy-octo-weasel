@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <style>
+      * {
+        font-family: Arial;
+      }
+      thead, td {
+        padding: 1em;
+      }
+    </style>
+  </head>
+  <body data-ng-app = "foodApp">
+    <main data-ng-controller   = "LogsController" data-ng-init = "getAll()">
+      <h1>Fast Food Logs.</h1>
+      
+    <!-- 
+    <form name = "testform" data-ng-submit = "test()">
+      <button type = "submit">service test</button>
+    </form>
+ -->
+      <form name = "newLogForm" data-ng-submit = "makeLog(newLog)">
+        <label for "restaurant">New Log:
+          <input type = "text" placeholder = "restaurant" required data-ng-model = "newLog.restaurant">
+           <input type = "text" placeholder = "item" required data-ng-model = "newLog.item">
+        </label>
+        <button type = "submit" data-ng-disabled = "newLogForm.$invalid">Make New Log</button>
+      </form>
+
+      <br/>
+      
+      <table>
+        <thead>
+          <tr style = "font-weight: bold; text-align: center;">
+            <td>Restaurant</td>
+            <td>Item</td>
+            <td>Date</td>
+          </tr>
+          <tr data-ng-repeat = "log in logs">
+            <td data-ng-if = "!log.editing">{{log.restaurant}}</td> 
+            <td data-ng-if = "!log.editing">{{log.item}}</td>
+            <td data-ng-if = "!log.editing">{{log.date | date: 'mediumDate'}}</td>
+            <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.restaurant"></td>
+            <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.item"></td>
+            <td>
+              <button data-ng-if = "!log.editing" data-ng-click = "editDelete(log)">Edit/Delete</button>
+              <button data-ng-if = "log.editing" data-ng-click = "updateLog(log)">Save</button>
+              <button data-ng-if = "log.editing" data-ng-click = removeLog(log)>Delete</button>
+              <button data-ng-if = 'log.editing' data-ng-click = "cancelEdit(log)">CANCEL</button> 
+            </td>
+          </tr>  
+        </thead>
+        
+
+      </table>
+      
+<!--       <ul>
+        <li data-ng-repeat = "log in logs">
+          <div data-ng-if = "!log.editing">{{log.restaurant}}, {{log.item}}
+            <button data-ng-click = "log.editing = true">Edit</button>
+            <button data-ng-click = removeLog(log)>Delete</button>
+          </div>
+          <form data-ng-if = "log.editing" name = "{{'newLogForm' + log._id}}" data-ng-submit = "updateLog(log)">
+            <input type = "text" data-ng-model = "log.restaurant">
+            <input type = "text" data-ng-model = "log.item">
+            <button type = "submit">SAVE</button>
+          </form> 
+          <button data-ng-if = 'log.editing' data-ng-click = "cancelEdit(log)">CANCEL</button> 
+        </li>
+      </ul> -->
+
+
+
+
+    </main>
+    <script src = "bundle.js"></script>
+  </body>
+</html>

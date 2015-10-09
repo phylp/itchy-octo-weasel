@@ -47,10 +47,9 @@
 	__webpack_require__ (1);
 	var foodApp = angular.module('foodApp', []);
 
-
 	__webpack_require__(2)(foodApp);
 	__webpack_require__(4)(foodApp);
-	//require('./directives/my-directive');
+	__webpack_require__(6)(foodApp);
 
 
 
@@ -28995,7 +28994,7 @@
 	    x.get = function(callback){
 	      $http.get('/logger/showlogs')
 	      .then(
-	        handleSuccess(callback),    //angular automatically puts response parameter on your callback 
+	        handleSuccess(callback),  //angular automatically puts response parameter on your callback 
 	        handleFailure(callback)   //in case of err
 	      );
 	    };
@@ -29029,17 +29028,44 @@
 	  }])
 	}
 
+
+
+
 /***/ },
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app){
 	  __webpack_require__(5)(app);
+	}
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	module.exports = function(app){
+	  console.log('does this display')
+	  app.directive('simplething', function(){
+	    return {
+	      restrict: 'AEC',
+	      templateUrl: 'templates/directives/mylogs.html',
+	      controller: 'LogsController'
+	    }
+	  })
+	}
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app){
+	  __webpack_require__(7)(app);
 	};
 
 
 /***/ },
-/* 5 */
+/* 7 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -29075,6 +29101,7 @@
 	    // };
 
 	    $scope.makeLog = function(log){
+	      console.log(log);
 	      logfactory.make(log, function(err, data){
 	        if(err) return console.log(err);
 	        $scope.logs.push(data);

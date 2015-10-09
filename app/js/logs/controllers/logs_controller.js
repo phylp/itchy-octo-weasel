@@ -31,6 +31,7 @@ module.exports = function(app){
     // };
 
     $scope.makeLog = function(log){
+      console.log(log);
       logfactory.make(log, function(err, data){
         if(err) return console.log(err);
         $scope.logs.push(data);

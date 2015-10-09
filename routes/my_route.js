@@ -88,12 +88,12 @@ logRoute.put('/update', jsonParser, function(req, res){
 
 logRoute.post('/send', jsonParser, function(req, res){
   var newLog = new Log(req.body);
+  newLog.author = req.body.username;
   newLog.save(function(err, data){
     if(err){
       errorHandle(err);
     } else {
       res.json(data)
-      //res.end();
     }
   });
 });

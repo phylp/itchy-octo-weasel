@@ -47,5 +47,10 @@ gulp.task('karmatests', ['webpack:test'], function(done) {
   }, done).start();
 });
 
+gulp.task('watch', function(){
+  return gulp.watch(['app/**/*'],['default'])
+});
+
 gulp.task('build:dev', ['staticfiles:dev', 'webpack:dev']);
 gulp.task('default', ['build:dev']);
+

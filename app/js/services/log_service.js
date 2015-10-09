@@ -18,7 +18,7 @@ module.exports = function(app){
     x.get = function(callback){
       $http.get('/logger/showlogs')
       .then(
-        handleSuccess(callback),    //angular automatically puts response parameter on your callback 
+        handleSuccess(callback),  //angular automatically puts response parameter on your callback 
         handleFailure(callback)   //in case of err
       );
     };
@@ -51,3 +51,5 @@ module.exports = function(app){
 
   }])
 }
+
+
