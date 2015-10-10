@@ -47,8 +47,20 @@ module.exports = function(app){
       });
     };
 
-    $scope.makeLog2 = function(log){
-      $http.post('/logger/addtolog/' + log.item)
+    // $scope.makeLog2 = function(log){
+    //   $http.post('/logger/addtolog/' + log.item)
+    //     .then(
+    //       function(res){
+    //         console.log('success') 
+    //     },
+    //       function(res){
+    //         console.log(err);
+    //       }
+    //   );
+    // };
+
+      $scope.makeLog2 = function(log){
+      $http.post('/logger/addtolog/' + log.restaurant + '/' + log.item)
         .then(
           function(res){
             console.log('success') 

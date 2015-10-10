@@ -88,22 +88,46 @@ usersRouter.get('/username', jsonParser, eatAuth, function(req, res) {
 });
 
 /* ================ ADD FOOD REF TO USER LOGS ====================== */
-usersRouter.post('/addtolog/:item', jsonParser, eatAuth, function(req, res) {
+// usersRouter.post('/addtolog/:item', jsonParser, eatAuth, function(req, res) {
+  
+//   var thingToAdd;
+
+//   Food.findOne({item: req.params.item}, function(err, thing){
+//       if(err) errorHandle(err);
+//       thingToAdd = thing._id;
+//   });
+
+//   User.findOne({username: req.user.username}, function(err, user){
+//     if(err) errorHandle(err);
+//     user.logs.push(thingToAdd);
+//     user.save(function(err){
+//       if(err) errorHandle(err);
+//     });
+//     res.json(user);
+//   })
+
+// });
+
+usersRouter.post('/addtolog/:restaurant/:item', jsonParser, eatAuth, function(req, res) {
   
   var thingToAdd;
 
-  Food.findOne({item: req.params.item}, function(err, thing){
+  Food.findOne({restaurant: req.params.restaurant, item: req.params.item}, function(err, thing){
       if(err) errorHandle(err);
+      if(!thing) return console.log('this isnt a thing');
       thingToAdd = thing._id;
   });
 
   User.findOne({username: req.user.username}, function(err, user){
     if(err) errorHandle(err);
-    user.logs.push(thingToAdd);
-    user.save(function(err){
-      if(err) errorHandle(err);
-    });
-    res.json(user);
+    if(thingToAdd){
+      user.logs.push({fooditem: thingToAdd});
+      user.save(function(err){
+        if(err) errorHandle(err);
+      });
+      res.json(user);
+    }
+    
   })
 
 });
