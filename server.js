@@ -12,6 +12,10 @@ app.use('/logger', logRouter);
 var userRouter = require(__dirname + '/routes/users_routes');
 app.use('/logger', userRouter);
 
+var foodRouter = require(__dirname + '/routes/food_routes');
+app.use('/logger', foodRouter);
+
+
 var port = process.env.PORT || 3000;
 app.listen(port, function (){
   console.log('the server is running at port ' + port);

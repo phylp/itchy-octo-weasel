@@ -6,6 +6,8 @@ var httpBasic = require(__dirname + '/../lib/http_basic');
 var eatAuth = require(__dirname + '/../lib/eat_auth');
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter();
+var Food = require(__dirname + '/../models/food');
+
 
 var usersRouter = module.exports = exports = express.Router();
 
@@ -84,6 +86,28 @@ ee.on('generateToken2', function(req, res, user){
 usersRouter.get('/username', jsonParser, eatAuth, function(req, res) {
   res.json({username: req.user.username});
 });
+
+/* ================ ADD FOOD REF TO USER LOGS ====================== */
+usersRouter.post('/addtolog/:item', jsonParser, eatAuth, function(req, res) {
+  
+  var thingToAdd;
+
+  Food.findOne({item: req.params.item}, function(err, thing){
+      if(err) errorHandle(err);
+      thingToAdd = thing._id;
+  });
+
+  User.findOne({username: req.user.username}, function(err, user){
+    if(err) errorHandle(err);
+    user.logs.push(thingToAdd);
+    user.save(function(err){
+      if(err) errorHandle(err);
+    });
+    res.json(user);
+  })
+
+});
+
 
 
 // usersRouter.get('/signin', httpBasic, function(req, res) {

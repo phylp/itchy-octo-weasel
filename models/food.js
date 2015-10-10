@@ -7,5 +7,4 @@ var foodSchema = new mongoose.Schema({
   calories: {type: Number, required: true}
 });
 
-
 module.exports = mongoose.model('Food', foodSchema);

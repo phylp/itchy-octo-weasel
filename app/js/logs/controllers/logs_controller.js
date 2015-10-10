@@ -2,6 +2,7 @@ module.exports = function(app){
   app.controller('LogsController', ['$scope', 'logfactory', '$http', '$cookies', '$location', function($scope, logfactory, $http, $cookies, $location){
     $scope.logs = [];
     $scope.newLog = {};
+    $scope.test = "greetings from the new test"
 
     // $scope.getAll = function(){
     //   $http.get('/logger/showlogs')
@@ -46,6 +47,18 @@ module.exports = function(app){
       });
     };
 
+    $scope.makeLog2 = function(log){
+      $http.post('/logger/addtolog/' + log.item)
+        .then(
+          function(res){
+            console.log('success') 
+        },
+          function(res){
+            console.log(err);
+          }
+      );
+    };
+
     var oldRestaurant;
     var oldItem;
 
@@ -55,6 +68,7 @@ module.exports = function(app){
       log.editing = true;
     }
 
+  
     // $scope.updateLog = function(log){
     //   $http.put('/logger/update', log)
     //   .then(function(res){
