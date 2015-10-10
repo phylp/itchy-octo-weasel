@@ -1,6 +1,7 @@
 module.exports = function(app){
-  app.controller('LogsController', ['$scope', 'logfactory', '$http', function($scope, logfactory, $http){
+  app.controller('LogsController', ['$scope', 'logfactory', '$http', '$cookies', '$location', function($scope, logfactory, $http, $cookies, $location){
     $scope.logs = [];
+    $scope.newLog = {};
 
     // $scope.getAll = function(){
     //   $http.get('/logger/showlogs')
@@ -10,6 +11,11 @@ module.exports = function(app){
     //     console.log(res)
     //   });
     // };
+    var eat = $cookies.get('eat');
+    if (!(eat && eat.length))
+      $location.path('/signup');
+    
+    $http.defaults.headers.common.token = eat;
 
     
     $scope.getAll = function(){

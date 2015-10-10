@@ -2,14 +2,25 @@ var Log = require(__dirname + '/../models/log');
 var express = require('express');
 var jsonParser = require('body-parser').json();
 var errorHandle = require(__dirname + '/../lib/error_handle');
+var eatAuth = require(__dirname + '/../lib/eat_auth');
 
 var logRoute = module.exports = exports = express.Router();
 
-logRoute.get('/showlogs', function(req,res){
-  Log.find({}, function(err, data){
-    if(err){
-      return errorHandle(err, res);
-    }
+// logRoute.get('/showlogs', function(req,res){
+//   console.log(req.user);
+
+//   Log.find({author: req.username}, function(err, res){
+//      // console.log(req);
+//     if(err){
+//       return errorHandle(err, data);
+//     }
+//     res.json(data);
+//   });sss
+// });
+
+logRoute.get('/showlogs', jsonParser, eatAuth, function(req, res) {
+  Log.find({author: req.user.username}, function(err, data) {
+    if (err) return handleError(err, res);
     res.json(data);
   });
 });
@@ -86,15 +97,25 @@ logRoute.put('/update', jsonParser, function(req, res){
   })
 });
 
-logRoute.post('/send', jsonParser, function(req, res){
+// logRoute.post('/send', jsonParser, function(req, res){
+//   console.log(req.body);
+//   var newLog = new Log(req.body);
+//   newLog.author = req.body.username;
+//   newLog.save(function(err, data){
+//     if(err){
+//       errorHandle(err);
+//     } else {
+//       res.json(data)
+//     }
+//   });
+// });
+
+logRoute.post('/send', jsonParser, eatAuth, function(req, res) {
   var newLog = new Log(req.body);
-  newLog.author = req.body.username;
-  newLog.save(function(err, data){
-    if(err){
-      errorHandle(err);
-    } else {
-      res.json(data)
-    }
+  newLog.author = req.user.username;
+  newLog.save(function(err, data) {
+    if (err) handleError(err, res);
+    res.json(data);
   });
 });
 

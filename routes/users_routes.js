@@ -3,6 +3,7 @@ var User = require(__dirname + '/../models/user');
 var jsonParser = require('body-parser').json();
 var errorHandle = require(__dirname + '/../lib/error_handle');
 var httpBasic = require(__dirname + '/../lib/http_basic');
+var eatAuth = require(__dirname + '/../lib/eat_auth');
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter();
 
@@ -77,6 +78,13 @@ ee.on('generateToken2', function(req, res, user){
     res.json({token: token});
   });
 });
+
+
+/* ================ GET USER NAME ====================== */
+usersRouter.get('/username', jsonParser, eatAuth, function(req, res) {
+  res.json({username: req.user.username});
+});
+
 
 // usersRouter.get('/signin', httpBasic, function(req, res) {
 //   User.findOne({'basic.username': req.auth.username}, function(err, user) {

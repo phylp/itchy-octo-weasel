@@ -26,6 +26,7 @@
 
 <body data-ng-app = "foodApp">
   <a name="about"></a>
+  <a data-ng-if="loggedIn()" href data-ng-click="logOut()">Log Out{{username? ' of ' + username : ''}}</a>
   <div class="intro-header">
     <div class="container">
       <div class="row">
@@ -39,8 +40,9 @@
       </div>
     </div>
   </div>
-  <!-- ANGULAR DIRECTIVE -->
-  <simplething></simplething>
+  <main data-ng-view></main>
+  <!-- ANGULAR DIRECTIVE 
+  <simplething></simplething>-->
   <script src="js/jquery.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src = "bundle.js"></script>
