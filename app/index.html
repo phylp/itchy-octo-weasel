@@ -23,7 +23,7 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
-
+<body data-ng-app = "foodApp">
   <!-- Navigation -->
   <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
       <div class="container topnav">
@@ -49,14 +49,15 @@
                   <li>
                       <a href="#contact">Contact</a>
                   </li>
+                  <li>
+                      <a data-ng-if="loggedIn()" href data-ng-click="logOut()">Log Out{{username? ' of ' + username : ''}}</a>
+                  </li>
               </ul>
           </div>
-          <!-- /.navbar-collapse -->
       </div>
-      <!-- /.container -->
   </nav>
 
-<body data-ng-app = "foodApp">
+<!-- <body data-ng-app = "foodApp"> -->
   <a name="about"></a>
   <a data-ng-if="loggedIn()" href data-ng-click="logOut()">Log Out{{username? ' of ' + username : ''}}</a>
 

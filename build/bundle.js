@@ -30650,7 +30650,7 @@
 	    //   );
 	    // };
 
-	      $scope.makeLog2 = function(log){                      // problem is that first promise always returned as successful
+	      $scope.makeLog2 = function(log){                      
 	      $http.post('/logger/addtolog/' + log.restaurant + '/' + log.item)
 	        .then(
 	          function(res){
@@ -30948,7 +30948,7 @@
 
 	    $scope.logOut = function() {
 	      $cookies.remove('eat');
-	      $location.path('/signin');
+	      $location.path('/landing');
 	    };
 
 	    $scope.getUserName = function(callback) {

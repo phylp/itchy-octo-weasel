@@ -7,7 +7,7 @@ module.exports = function(app) {
 
     $scope.logOut = function() {
       $cookies.remove('eat');
-      $location.path('/signin');
+      $location.path('/landing');
     };
 
     $scope.getUserName = function(callback) {
