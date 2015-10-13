@@ -30609,7 +30609,6 @@
 	      $location.path('/signup');
 	    
 	    $http.defaults.headers.common.token = eat;
-
 	    
 	    $scope.getAll = function(){
 	      logfactory.get(function(err, data){
@@ -30651,14 +30650,15 @@
 	    //   );
 	    // };
 
-	      $scope.makeLog2 = function(log){
+	      $scope.makeLog2 = function(log){                      // problem is that first promise always returned as successful
 	      $http.post('/logger/addtolog/' + log.restaurant + '/' + log.item)
 	        .then(
 	          function(res){
-	            console.log('success') 
+	            console.log(res);
+	            $scope.warning = ''; 
 	        },
 	          function(res){
-	            console.log(err);
+	            $scope.warning = 'Item not found. Check your spelling';
 	          }
 	      );
 	    };
@@ -30714,6 +30714,8 @@
 	      log.item = oldItem;
 	      log.editing = false;
 	    }
+
+	    $scope.warning;
 
 	  }]);
 	};
@@ -30994,16 +30996,19 @@
 	        templateUrl: 'templates/users/views/signupin_view.html',
 	        controller: 'SigninController'
 	      })
-	      .when('/home', {
-	        templateUrl: 'templates/home.html',
-	        controller: 'LogsController'
-	      })
+	      // .when('/home', {
+	      //   templateUrl: 'templates/home.html',
+	      //   controller: 'LogsController'
+	      // })
 	      .when('/logs', {
 	        templateUrl: 'templates/home.html',
 	        controller: 'LogsController'
 	      })
+	      .when('/landing', {
+	        templateUrl: 'templates/landing.html',
+	      })
 	      .otherwise({
-	        redirectTo: '/home'
+	        redirectTo: '/landing'
 	      })
 	  }]);
 	};

@@ -17,7 +17,6 @@ module.exports = function(app){
       $location.path('/signup');
     
     $http.defaults.headers.common.token = eat;
-
     
     $scope.getAll = function(){
       logfactory.get(function(err, data){
@@ -59,14 +58,15 @@ module.exports = function(app){
     //   );
     // };
 
-      $scope.makeLog2 = function(log){
+      $scope.makeLog2 = function(log){                      
       $http.post('/logger/addtolog/' + log.restaurant + '/' + log.item)
         .then(
           function(res){
-            console.log('success') 
+            console.log(res);
+            $scope.warning = ''; 
         },
           function(res){
-            console.log(err);
+            $scope.warning = 'Item not found. Check your spelling';
           }
       );
     };
@@ -122,6 +122,8 @@ module.exports = function(app){
       log.item = oldItem;
       log.editing = false;
     }
+
+    $scope.warning;
 
   }]);
 };

@@ -114,7 +114,10 @@ usersRouter.post('/addtolog/:restaurant/:item', jsonParser, eatAuth, function(re
 
   Food.findOne({restaurant: req.params.restaurant, item: req.params.item}, function(err, thing){
       if(err) errorHandle(err);
-      if(!thing) return console.log('this isnt a thing');
+      if(!thing){
+        res.status(400).json({msg: "bad input"});
+        return console.log('client sent bad input')
+      }
       thingToAdd = thing._id;
   });
 
