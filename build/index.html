@@ -24,7 +24,6 @@
   <![endif]-->
 </head>
 <body data-ng-app = "foodApp">
-  <!-- Navigation -->
   <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
       <div class="container topnav">
           <!-- Brand and toggle get grouped for better mobile display -->
@@ -57,12 +56,8 @@
       </div>
   </nav>
 
-<!-- <body data-ng-app = "foodApp"> -->
   <a name="about"></a>
-  <a data-ng-if="loggedIn()" href data-ng-click="logOut()">Log Out{{username? ' of ' + username : ''}}</a>
-
-  <main data-ng-view></main>
-  
+  <main data-ng-view></main>  
 
   <footer>
     <div class="container">
