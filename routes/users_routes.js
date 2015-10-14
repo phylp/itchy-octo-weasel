@@ -108,6 +108,7 @@ usersRouter.get('/username', jsonParser, eatAuth, function(req, res) {
 
 // });
 
+//ADD LOG TO USER 
 usersRouter.post('/addtolog/:restaurant/:item', jsonParser, eatAuth, function(req, res) {
   
   var thingToAdd;
@@ -130,68 +131,52 @@ usersRouter.post('/addtolog/:restaurant/:item', jsonParser, eatAuth, function(re
       });
       res.json(user);
     }
-    
   })
+});
 
+//RETRIEVE LOGS FROM USER
+usersRouter.get('/getuserlogs', jsonParser, eatAuth, function(req, res){
+  
+  var initialLogs = [];
+  User.findOne({username: req.user.username}, function(err, user){
+    if(err) errorHandle(err);
+    for(var i = 0; i < user.logs.length; i++){
+      //console.log(user.logs[i] + ' first clog');
+      initialLogs.push(user.logs[i]);
+    };
+    console.log('initial LOGS:' + initialLogs)
+    ee.emit('initialLogsComplete', initialLogs, req, res);
+  });  
+});
+
+ee.on('initialLogsComplete', function(initialLogs, req, res){
+  var secondLogs = [];
+  
+  function createLogs(){
+    console.log('inside create logs function');
+    console.log('length: ' + initialLogs.length);
+    if(initialLogs.length){  
+      Food.findOne({_id: initialLogs[0].fooditem}, function(err, data){
+        if(err)errorHandle(err);
+          secondLogs.push({restaurant: data.restaurant});
+          initialLogs.shift();
+          createLogs();
+      });
+    } else {
+    ee.emit('finalizeFoodList', secondLogs, req, res)
+    }
+  }
+  createLogs();
+});
+  
+
+ee.on('finalizeFoodList', function(secondLogs, req, res){
+  console.log('final part ' + secondLogs[0]);
+  console.log(secondLogs.length);
+  console.log(secondLogs);
+  res.end();
 });
 
 
 
-// usersRouter.get('/signin', httpBasic, function(req, res) {
-//   User.findOne({'basic.username': req.auth.username}, function(err, user) {
-//     if (err) return errorHandle(err, res);
 
-//     if (!user) {
-//       console.log('could not authenticat: ' + req.auth.username);
-//       return res.status(401).json({msg: 'could not authenticat'});
-//     }
-
-//     user.compareHash(req.auth.password, function(err, hashRes) {
-//       if (err) return errorHandle(err, res);
-//       if (!hashRes) {
-//         console.log('could not authenticat: ' + req.auth.username);
-//         return res.status(401).json({msg: 'authenticat says no!'});
-//       }
-
-//       user.generateToken(function(err, token) {
-//         if (err) return errorHandle(err, res);
-//         res.json({token: token});
-//       });
-//     });
-//   });
-// });
-
-// var user;
-
-// usersRouter.get('/signin', httpBasic, function(req, res) {
-//   ee.emit('findOne', req, res, user);
-// });
-
-// ee.on('findOne', function(req, res, user){
-//   User.findOne({'basic.username': req.auth.username}, function(err, user) {
-//     if (err) return errorHandle(err, res);
-//     if (!user) {
-//       console.log('could not authenticat: ' + req.auth.username);
-//       return res.status(401).json({msg: 'could not authenticat'});
-//     }
-//     ee.emit('compareHashAgain', req, res, user)
-//   });
-// });
-
-// ee.on('compareHashAgain', function(req, res, user){
-//   user.compareHash(req.auth.password, function(err, hashRes) {
-//     if (err) return errorHandle(err, res);
-//     if (!hashRes) {
-//       console.log('could not authenticat: ' + req.auth.username);
-//       return res.status(401).json({msg: 'authenticat says no!'});
-//     }
-//     ee.emit('generateToken', req, res, user);
-//   });
-// });
-
-// ee.on('generateToken', function(req, res, user){
-//   user.generateToken(function(err, token) {
-//     if (err) return errorHandle(err, res);
-//     res.json({token: token});
-//   });
-// });

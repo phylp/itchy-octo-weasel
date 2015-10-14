@@ -29,7 +29,8 @@ module.exports = function(app){
       });
     };
 
-    $scope.makeLog2 = function(foodLog){                      
+    $scope.makeLog2 = function(foodLog){
+    $scope.successMsg = '';                      
     $http.post('/logger/addtolog/' + foodLog.restaurant + '/' + foodLog.item)
       .then(
         function(res){
@@ -76,5 +77,15 @@ module.exports = function(app){
       log.editing = false;
     }
 
+    $scope.detailedLogsTest = 'detailed log output';
+    $scope.getDetailedLogs = function(){
+      $http.get('/logger/getuserlogs')
+        .then(
+          function(res){$scope.detailedLogsTest = 'promise returned'},
+          function(res){$scope.detailedLogsTest = 'did not work'}
+        )
+    };
+
   }]);
 };
+
