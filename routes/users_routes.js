@@ -137,16 +137,24 @@ usersRouter.post('/addtolog/:restaurant/:item', jsonParser, eatAuth, function(re
 //RETRIEVE LOGS FROM USER
 usersRouter.get('/getuserlogs', jsonParser, eatAuth, function(req, res){
   
-  var initialLogs = [];
+  // var initialLogs = [];
+  // User.findOne({username: req.user.username}, function(err, user){
+  //   if(err) errorHandle(err);
+  //   for(var i = 0; i < user.logs.length; i++){
+  //     //console.log(user.logs[i] + ' first clog');
+  //     initialLogs.push(user.logs[i]);
+  //   };
+  //   console.log('initial LOGS:' + initialLogs)
+  //   ee.emit('initialLogsComplete', initialLogs, req, res);
+  // });
+
   User.findOne({username: req.user.username}, function(err, user){
     if(err) errorHandle(err);
-    for(var i = 0; i < user.logs.length; i++){
-      //console.log(user.logs[i] + ' first clog');
-      initialLogs.push(user.logs[i]);
-    };
-    console.log('initial LOGS:' + initialLogs)
+    var initialLogs = user.logs;
+    console.log(initialLogs)
     ee.emit('initialLogsComplete', initialLogs, req, res);
-  });  
+  });   
+
 });
 
 ee.on('initialLogsComplete', function(initialLogs, req, res){

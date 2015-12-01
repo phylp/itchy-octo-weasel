@@ -17,7 +17,7 @@ module.exports = function(app) {
 
       $http({
         method: 'GET',
-        url: '/logger/username',
+        url: '/api/username',
         headers: {
           token: eat
         }
