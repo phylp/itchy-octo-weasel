@@ -3,8 +3,11 @@ var User = require(__dirname + '/../models/user');
 var jsonParser = require('body-parser').json();
 var errorHandle = require(__dirname + '/../lib/error_handle');
 var httpBasic = require(__dirname + '/../lib/http_basic');
+var eatAuth = require(__dirname + '/../lib/eat_auth');
 var eventEmitter = require('events').EventEmitter;
 var ee = new eventEmitter();
+var Food = require(__dirname + '/../models/food');
+
 
 var usersRouter = module.exports = exports = express.Router();
 
@@ -78,61 +81,108 @@ ee.on('generateToken2', function(req, res, user){
   });
 });
 
-// usersRouter.get('/signin', httpBasic, function(req, res) {
-//   User.findOne({'basic.username': req.auth.username}, function(err, user) {
-//     if (err) return errorHandle(err, res);
 
-//     if (!user) {
-//       console.log('could not authenticat: ' + req.auth.username);
-//       return res.status(401).json({msg: 'could not authenticat'});
-//     }
+/* ================ GET USER NAME ====================== */
+usersRouter.get('/username', jsonParser, eatAuth, function(req, res) {
+  res.json({username: req.user.username});
+});
 
-//     user.compareHash(req.auth.password, function(err, hashRes) {
-//       if (err) return errorHandle(err, res);
-//       if (!hashRes) {
-//         console.log('could not authenticat: ' + req.auth.username);
-//         return res.status(401).json({msg: 'authenticat says no!'});
-//       }
+/* ================ ADD FOOD REF TO USER LOGS ====================== */
+// usersRouter.post('/addtolog/:item', jsonParser, eatAuth, function(req, res) {
+  
+//   var thingToAdd;
 
-//       user.generateToken(function(err, token) {
-//         if (err) return errorHandle(err, res);
-//         res.json({token: token});
-//       });
+//   Food.findOne({item: req.params.item}, function(err, thing){
+//       if(err) errorHandle(err);
+//       thingToAdd = thing._id;
+//   });
+
+//   User.findOne({username: req.user.username}, function(err, user){
+//     if(err) errorHandle(err);
+//     user.logs.push(thingToAdd);
+//     user.save(function(err){
+//       if(err) errorHandle(err);
 //     });
-//   });
+//     res.json(user);
+//   })
+
 // });
 
-// var user;
+//ADD LOG TO USER 
+usersRouter.post('/addtolog/:restaurant/:item', jsonParser, eatAuth, function(req, res) {
+  
+  var thingToAdd;
 
-// usersRouter.get('/signin', httpBasic, function(req, res) {
-//   ee.emit('findOne', req, res, user);
-// });
+  Food.findOne({restaurant: req.params.restaurant, item: req.params.item}, function(err, thing){
+      if(err) errorHandle(err);
+      if(!thing){
+        res.status(400).json({msg: "bad input"});
+        return console.log('client sent bad input')
+      }
+      thingToAdd = thing._id;
+  });
 
-// ee.on('findOne', function(req, res, user){
-//   User.findOne({'basic.username': req.auth.username}, function(err, user) {
-//     if (err) return errorHandle(err, res);
-//     if (!user) {
-//       console.log('could not authenticat: ' + req.auth.username);
-//       return res.status(401).json({msg: 'could not authenticat'});
-//     }
-//     ee.emit('compareHashAgain', req, res, user)
-//   });
-// });
+  User.findOne({username: req.user.username}, function(err, user){
+    if(err) errorHandle(err);
+    if(thingToAdd){
+      user.logs.push({fooditem: thingToAdd});
+      user.save(function(err){
+        if(err) errorHandle(err);
+      });
+      res.json(user);
+    }
+  })
+});
 
-// ee.on('compareHashAgain', function(req, res, user){
-//   user.compareHash(req.auth.password, function(err, hashRes) {
-//     if (err) return errorHandle(err, res);
-//     if (!hashRes) {
-//       console.log('could not authenticat: ' + req.auth.username);
-//       return res.status(401).json({msg: 'authenticat says no!'});
-//     }
-//     ee.emit('generateToken', req, res, user);
-//   });
-// });
+//RETRIEVE LOGS FROM USER
+usersRouter.get('/getuserlogs', jsonParser, eatAuth, function(req, res){
+  
+  // var initialLogs = [];
+  // User.findOne({username: req.user.username}, function(err, user){
+  //   if(err) errorHandle(err);
+  //   for(var i = 0; i < user.logs.length; i++){
+  //     //console.log(user.logs[i] + ' first clog');
+  //     initialLogs.push(user.logs[i]);
+  //   };
+  //   console.log('initial LOGS:' + initialLogs)
+  //   ee.emit('initialLogsComplete', initialLogs, req, res);
+  // });
 
-// ee.on('generateToken', function(req, res, user){
-//   user.generateToken(function(err, token) {
-//     if (err) return errorHandle(err, res);
-//     res.json({token: token});
-//   });
-// });
+  User.findOne({username: req.user.username}, function(err, user){
+    if(err) errorHandle(err);
+    var initialLogs = user.logs;
+    //console.log(initialLogs)
+    ee.emit('initialLogsComplete', initialLogs, req, res);
+  });   
+});
+
+ee.on('initialLogsComplete', function(initialLogs, req, res){
+  var secondLogs = [];
+  
+  function createLogs(){
+    console.log('inside create logs function');
+    console.log('length: ' + initialLogs.length);
+    if(initialLogs.length){  
+      Food.findOne({_id: initialLogs[0].fooditem}, function(err, data){
+        if(err)errorHandle(err);
+          secondLogs.push({restaurant: data.restaurant, item: data.item, calories: data.calories, date: initialLogs[0].date});
+          initialLogs.shift();
+          createLogs();
+      });
+    } else {
+    ee.emit('finalizeFoodList', secondLogs, req, res)
+    }
+  }
+  createLogs();
+});
+  
+
+ee.on('finalizeFoodList', function(secondLogs, req, res){
+  //console.log(secondLogs.length);
+  //console.log(secondLogs);
+  res.json(secondLogs);
+});
+
+
+
+

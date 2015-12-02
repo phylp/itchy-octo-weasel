@@ -4,15 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/mocha/bin/mocha test"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "angular": "^1.4.7",
+    "angular-base64": "^2.0.5",
+    "angular-cookies": "^1.4.7",
+    "angular-mocks": "^1.4.7",
+    "angular-route": "^1.4.7",
     "chai": "^3.2.0",
     "chai-http": "^1.0.0",
     "gulp": "^3.9.0",
+    "gulp-mocha": "^2.1.3",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.10",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.1",
     "mocha": "^2.3.2",
+    "phantomjs": "^1.9.18",
     "webpack-stream": "^2.1.1"
   },
   "dependencies": {
@@ -21,6 +32,7 @@
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "eat": "^0.1.1",
+    "express": "^4.13.3",
     "mongoose": "^4.1.7",
     "mongoose-unique-validator": "^0.4.1",
     "mongoose-validate": "git://github.com/RGBboy/mongoose-validate.git"

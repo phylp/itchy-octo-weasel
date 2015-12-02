@@ -8,7 +8,14 @@ var userSchema = new mongoose.Schema({
   basic: {
     username: {type: String, unique: true, required: true},
     password: {type: String, required: true}
-  }
+  },
+  logs: [
+    {
+      fooditem: {type: mongoose.Schema.Types.ObjectId, ref: 'Food'},
+      date: {type: Date, default: Date.now}
+    }
+  ]
+
 });
 
 userSchema.plugin(uniqueValidator);

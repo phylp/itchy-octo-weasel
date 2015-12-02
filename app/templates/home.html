@@ -1,0 +1,44 @@
+<section data-ng-init = "getAll()">
+  <div class="content-section-a">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 col-sm-6">
+          <div class="clearfix"></div>
+          <h2 class="section-heading">Your Shame Logs</h2>
+          <br/>
+          <table>
+            <tr data-ng-repeat = "log in logs">
+              <td data-ng-if = "!log.editing">{{log.restaurant | uc}}</td> 
+              <td data-ng-if = "!log.editing">{{log.item | uc}}</td>
+              <td data-ng-if = "!log.editing">{{log.calories}}</td>
+              <td data-ng-if = "!log.editing">{{log.date | date: 'mediumDate'}}</td>
+              <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.restaurant"></td>
+              <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.item"></td>
+              <td>
+                <button class = "myButton" data-ng-if = "!log.editing" data-ng-click = "editDelete(log)">Edit/Delete</button>
+                <button class = "myButton" data-ng-if = "log.editing" data-ng-click = "updateLog(log)">Save</button>
+                <button class = "myButton" data-ng-if = "log.editing" data-ng-click = removeLog(log)>Delete</button>
+                <button class = "myButton" data-ng-if = 'log.editing' data-ng-click = "cancelEdit(log)">CANCEL</button> 
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-lg-5 col-sm-6">
+           <!-- test -->
+          <h2 class="section-heading text-center">Add Shame</h2>
+
+           <form name = "newLogForm2" data-ng-submit = "makeLog2(foodLog)">
+            <label for "item">
+               <input type = "text" placeholder = "restaurant" data-ng-model = "foodLog.restaurant">
+               <input type = "text" placeholder = "item" data-ng-model = "foodLog.item">
+               <p style = "color:red;">{{ warning }}<p>
+               <p style = "color:green;">{{ successMsg }}<p>
+            </label>
+            <button class = "myButton" type = "submit">New Log2</button>
+          </form> 
+          <img class="img-responsive" src="img/cow.png" alt="cow">
+        </div>
+      </div>
+    </div> <!-- CONTAINER -->
+  </div>
+</section>
