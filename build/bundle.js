@@ -48,16 +48,17 @@
 	__webpack_require__(2);
 	__webpack_require__(4);
 	__webpack_require__(5);
+	__webpack_require__(7);
 	var angular = window.angular;
 
-	var foodApp = angular.module('foodApp', ['ngRoute', 'base64', 'ngCookies']);
+	var foodApp = angular.module('foodApp', ['ngRoute', 'base64', 'ngCookies', 'uppercaser']);
 
-	__webpack_require__(7)(foodApp);
-	__webpack_require__(9)(foodApp);
-	__webpack_require__(11)(foodApp);
-	__webpack_require__(15)(foodApp);
-	__webpack_require__(18)(foodApp);
+	__webpack_require__(8)(foodApp);
+	__webpack_require__(10)(foodApp);
+	__webpack_require__(12)(foodApp);
+	__webpack_require__(16)(foodApp);
 	__webpack_require__(19)(foodApp);
+	__webpack_require__(20)(foodApp);
 
 
 
@@ -30484,14 +30485,24 @@
 
 /***/ },
 /* 7 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	module.exports = function(app){
-	  __webpack_require__(8)(app);
-	}
+	angular.module('uppercaser', []).filter('uc', function (){
+	  return function(input){
+	    return input.replace(input[0], input[0].toUpperCase());
+	  };
+	});
 
 /***/ },
 /* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app){
+	  __webpack_require__(9)(app);
+	}
+
+/***/ },
+/* 9 */
 /***/ function(module, exports) {
 
 	var handleSuccess = function(callback){
@@ -30512,7 +30523,7 @@
 	    var x = {};
 
 	    x.get = function(callback){
-	      $http.get('/logger/showlogs')
+	      $http.get('/logger/getuserlogs')
 	      .then(
 	        handleSuccess(callback),  //angular automatically puts response parameter on your callback 
 	        handleFailure(callback)   //in case of err
@@ -30552,15 +30563,15 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app){
-	  __webpack_require__(10)(app);
+	  __webpack_require__(11)(app);
 	}
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -30576,27 +30587,26 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(app){
-	  __webpack_require__(12)(app);
 	  __webpack_require__(13)(app);
 	  __webpack_require__(14)(app);
+	  __webpack_require__(15)(app);
 	};
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
 	  app.controller('LogsController', ['$scope', 'logfactory', '$http', '$cookies', '$location', function($scope, logfactory, $http, $cookies, $location){
-	    $scope.logs = [];
+	    $scope.logs;
 	    $scope.newLog = {};
 	    $scope.warning;
 	    $scope.successMsg = ''; 
-	    $scope.test = "greetings from the new test"
 
 	    var eat = $cookies.get('eat');
 	    if (!(eat && eat.length))
@@ -30626,7 +30636,7 @@
 	    $http.post('/logger/addtolog/' + foodLog.restaurant + '/' + foodLog.item)
 	      .then(
 	        function(res){
-	          console.log(res);
+	          console.log('this is the res: ' + res);
 	          $scope.warning = '';
 	          foodLog.restaurant = '';
 	          foodLog.item = '';
@@ -30668,23 +30678,13 @@
 	      log.item = oldItem;
 	      log.editing = false;
 	    }
-
-	    $scope.detailedLogsTest = 'detailed log output';
-	    $scope.getDetailedLogs = function(){
-	      $http.get('/logger/getuserlogs')
-	        .then(
-	          function(res){$scope.detailedLogsTest = 'promise returned'},
-	          function(res){$scope.detailedLogsTest = 'did not work'}
-	        )
-	    };
-
 	  }]);
 	};
 
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	// module.exports = function(app){
@@ -30747,7 +30747,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -30785,18 +30785,18 @@
 
 	  }]);
 	};
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function(app){
-	  __webpack_require__(16)(app);
-	  __webpack_require__(17)(app);
-	}
 
 /***/ },
 /* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function(app){
+	  __webpack_require__(17)(app);
+	  __webpack_require__(18)(app);
+	}
+
+/***/ },
+/* 17 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -30836,7 +30836,7 @@
 	};
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	// module.exports = function(app){
@@ -30899,7 +30899,7 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	module.exports = function(app) {
@@ -30921,7 +30921,7 @@
 
 	      $http({
 	        method: 'GET',
-	        url: '/api/username',
+	        url: '/logger/username',
 	        headers: {
 	          token: eat
 	        }
@@ -30942,7 +30942,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	module.exports = function(app){
@@ -30959,10 +30959,6 @@
 	        templateUrl: 'templates/users/views/signupin_view.html',
 	        controller: 'SigninController'
 	      })
-	      // .when('/home', {
-	      //   templateUrl: 'templates/home.html',
-	      //   controller: 'LogsController'
-	      // })
 	      .when('/logs', {
 	        templateUrl: 'templates/home.html',
 	        controller: 'LogsController'

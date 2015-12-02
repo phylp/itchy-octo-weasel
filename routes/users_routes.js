@@ -151,10 +151,9 @@ usersRouter.get('/getuserlogs', jsonParser, eatAuth, function(req, res){
   User.findOne({username: req.user.username}, function(err, user){
     if(err) errorHandle(err);
     var initialLogs = user.logs;
-    console.log(initialLogs)
+    //console.log(initialLogs)
     ee.emit('initialLogsComplete', initialLogs, req, res);
   });   
-
 });
 
 ee.on('initialLogsComplete', function(initialLogs, req, res){
@@ -166,7 +165,7 @@ ee.on('initialLogsComplete', function(initialLogs, req, res){
     if(initialLogs.length){  
       Food.findOne({_id: initialLogs[0].fooditem}, function(err, data){
         if(err)errorHandle(err);
-          secondLogs.push({restaurant: data.restaurant});
+          secondLogs.push({restaurant: data.restaurant, item: data.item, calories: data.calories, date: initialLogs[0].date});
           initialLogs.shift();
           createLogs();
       });
@@ -179,10 +178,9 @@ ee.on('initialLogsComplete', function(initialLogs, req, res){
   
 
 ee.on('finalizeFoodList', function(secondLogs, req, res){
-  console.log('final part ' + secondLogs[0]);
-  console.log(secondLogs.length);
-  console.log(secondLogs);
-  res.end();
+  //console.log(secondLogs.length);
+  //console.log(secondLogs);
+  res.json(secondLogs);
 });
 
 

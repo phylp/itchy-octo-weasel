@@ -12,10 +12,6 @@ module.exports = function(app){
         templateUrl: 'templates/users/views/signupin_view.html',
         controller: 'SigninController'
       })
-      // .when('/home', {
-      //   templateUrl: 'templates/home.html',
-      //   controller: 'LogsController'
-      // })
       .when('/logs', {
         templateUrl: 'templates/home.html',
         controller: 'LogsController'

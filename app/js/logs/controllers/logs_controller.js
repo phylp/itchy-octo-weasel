@@ -1,10 +1,9 @@
 module.exports = function(app){
   app.controller('LogsController', ['$scope', 'logfactory', '$http', '$cookies', '$location', function($scope, logfactory, $http, $cookies, $location){
-    $scope.logs = [];
+    $scope.logs;
     $scope.newLog = {};
     $scope.warning;
     $scope.successMsg = ''; 
-    $scope.test = "greetings from the new test"
 
     var eat = $cookies.get('eat');
     if (!(eat && eat.length))
@@ -34,7 +33,7 @@ module.exports = function(app){
     $http.post('/logger/addtolog/' + foodLog.restaurant + '/' + foodLog.item)
       .then(
         function(res){
-          console.log(res);
+          console.log('this is the res: ' + res);
           $scope.warning = '';
           foodLog.restaurant = '';
           foodLog.item = '';
@@ -76,16 +75,6 @@ module.exports = function(app){
       log.item = oldItem;
       log.editing = false;
     }
-
-    $scope.detailedLogsTest = 'detailed log output';
-    $scope.getDetailedLogs = function(){
-      $http.get('/logger/getuserlogs')
-        .then(
-          function(res){$scope.detailedLogsTest = 'promise returned'},
-          function(res){$scope.detailedLogsTest = 'did not work'}
-        )
-    };
-
   }]);
 };
 

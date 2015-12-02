@@ -8,8 +8,9 @@
           <br/>
           <table>
             <tr data-ng-repeat = "log in logs">
-              <td data-ng-if = "!log.editing">{{log.restaurant}}</td> 
-              <td data-ng-if = "!log.editing">{{log.item}}</td>
+              <td data-ng-if = "!log.editing">{{log.restaurant | uc}}</td> 
+              <td data-ng-if = "!log.editing">{{log.item | uc}}</td>
+              <td data-ng-if = "!log.editing">{{log.calories}}</td>
               <td data-ng-if = "!log.editing">{{log.date | date: 'mediumDate'}}</td>
               <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.restaurant"></td>
               <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.item"></td>
@@ -23,17 +24,8 @@
           </table>
         </div>
         <div class="col-lg-5 col-sm-6">
-          <h2 class="section-heading text-center">Simple Y.O.L.O.</h2>
-          <form name = "newLogForm" data-ng-submit = "makeLog(newLog)">
-            <label for "restaurant">
-              <input type = "text" placeholder = "restaurant" required data-ng-model = "newLog.restaurant">
-               <input type = "text" placeholder = "item" required data-ng-model = "newLog.item">
-            </label>
-            <button class = "myButton" type = "submit" data-ng-disabled = "newLogForm.$invalid">New Log</button>
-          </form>
-
            <!-- test -->
-          <h2 class="section-heading text-center">Detailed Y.O.L.O.</h2>
+          <h2 class="section-heading text-center">Add Shame</h2>
 
            <form name = "newLogForm2" data-ng-submit = "makeLog2(foodLog)">
             <label for "item">
@@ -44,10 +36,6 @@
             </label>
             <button class = "myButton" type = "submit">New Log2</button>
           </form> 
-          <!-- test-->
-          {{ detailedLogsTest }}
-          <button class = "myButton" data-ng-click = "getDetailedLogs()">get detailed logs</button> 
-
           <img class="img-responsive" src="img/cow.png" alt="cow">
         </div>
       </div>

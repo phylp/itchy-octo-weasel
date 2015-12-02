@@ -4,7 +4,8 @@ var mongoose = require('mongoose');
 var foodSchema = new mongoose.Schema({
   restaurant: {type: String, required: true},
   item: {type: String, required: true},
-  calories: {type: Number, required: true}
+  calories: {type: Number, required: true},
+  fat: {type: Number, required: true}
 });
 
 module.exports = mongoose.model('Food', foodSchema);

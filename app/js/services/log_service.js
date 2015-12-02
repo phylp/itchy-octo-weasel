@@ -16,7 +16,7 @@ module.exports = function(app){
     var x = {};
 
     x.get = function(callback){
-      $http.get('/logger/showlogs')
+      $http.get('/logger/getuserlogs')
       .then(
         handleSuccess(callback),  //angular automatically puts response parameter on your callback 
         handleFailure(callback)   //in case of err

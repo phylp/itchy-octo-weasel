@@ -7,7 +7,7 @@ var eatAuth = require(__dirname + '/../lib/eat_auth');
 var logRoute = module.exports = exports = express.Router();
 
 logRoute.get('/showlogs', jsonParser, eatAuth, function(req, res) {
-  Log.find({author: req.user.username}, function(err, data) {
+  Log.find({username: req.user.username}, function(err, data) {
     if (err) return handleError(err, res);
     res.json(data);
   });
