@@ -39,14 +39,6 @@ module.exports = function(app){
       );
     };
 
-    x.delete = function(log, callback){
-      $http.delete('/logger/' + log._id, log)
-      .then(
-        handleSuccess(callback),
-        handleFailure(callback)
-      );
-    };
-
     return x;
 
   }])

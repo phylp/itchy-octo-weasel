@@ -147,16 +147,18 @@ usersRouter.get('/getuserlogs', jsonParser, eatAuth, function(req, res){
   //   console.log('initial LOGS:' + initialLogs)
   //   ee.emit('initialLogsComplete', initialLogs, req, res);
   // });
-
+  
   User.findOne({username: req.user.username}, function(err, user){
     if(err) errorHandle(err);
     var initialLogs = user.logs;
-    //console.log(initialLogs)
-    ee.emit('initialLogsComplete', initialLogs, req, res);
+    var userID = user._id;
+    var userName = req.user.username;
+    console.log('HERE ARE INITIAL LOGS ' + initialLogs)
+    ee.emit('initialLogsComplete', initialLogs, userID, userName, req, res);
   });   
 });
 
-ee.on('initialLogsComplete', function(initialLogs, req, res){
+ee.on('initialLogsComplete', function(initialLogs, userID, userName, req, res){
   var secondLogs = [];
   
   function createLogs(){
@@ -165,7 +167,7 @@ ee.on('initialLogsComplete', function(initialLogs, req, res){
     if(initialLogs.length){  
       Food.findOne({_id: initialLogs[0].fooditem}, function(err, data){
         if(err)errorHandle(err);
-          secondLogs.push({restaurant: data.restaurant, item: data.item, calories: data.calories, date: initialLogs[0].date});
+          secondLogs.push({username: userName, userID: userID, restaurant: data.restaurant, item: data.item, calories: data.calories, date: initialLogs[0].date});
           initialLogs.shift();
           createLogs();
       });
@@ -178,8 +180,6 @@ ee.on('initialLogsComplete', function(initialLogs, req, res){
   
 
 ee.on('finalizeFoodList', function(secondLogs, req, res){
-  //console.log(secondLogs.length);
-  //console.log(secondLogs);
   res.json(secondLogs);
 });
 

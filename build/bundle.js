@@ -30546,14 +30546,6 @@
 	      );
 	    };
 
-	    x.delete = function(log, callback){
-	      $http.delete('/logger/' + log._id, log)
-	      .then(
-	        handleSuccess(callback),
-	        handleFailure(callback)
-	      );
-	    };
-
 	    return x;
 
 	  }])
@@ -30606,7 +30598,10 @@
 	    $scope.logs;
 	    $scope.newLog = {};
 	    $scope.warning;
-	    $scope.successMsg = ''; 
+	    $scope.successMsg = '';
+	    $scope.tempDate = {
+	      value: new Date()
+	    } 
 
 	    var eat = $cookies.get('eat');
 	    if (!(eat && eat.length))
@@ -30618,11 +30613,13 @@
 	      logfactory.get(function(err, data){
 	        if(err) return console.log(err);
 	        $scope.logs = data;
+	        for(var i = 0; i < $scope.logs.length; i++){
+	          $scope.logs[i].index = i;
+	        }
 	      });
 	    };
 
 	    $scope.makeLog = function(log){
-	      console.log(log);
 	      logfactory.make(log, function(err, data){
 	        if(err) return console.log(err);
 	        $scope.logs.push(data);
@@ -30640,7 +30637,10 @@
 	          $scope.warning = '';
 	          foodLog.restaurant = '';
 	          foodLog.item = '';
-	          $scope.successMsg = 'Success!!'; 
+	          $scope.successMsg = 'Success!!';
+	          if($scope.successMsg === 'Success!!'){
+	            $scope.getAll();
+	          } 
 	      },
 	        function(res){
 	          $scope.warning = 'Item not found. Check your spelling';
@@ -30652,12 +30652,13 @@
 	    var oldItem;
 
 	    $scope.editDelete = function(log){
-	      oldRestaurant = log.restaurant;
-	      oldItem = log.item;
+	      //oldRestaurant = log.restaurant;
+	      //oldItem = log.item;
 	      log.editing = true;
 	    }
 
 	    $scope.updateLog = function(log){
+	      log.date = tempDate;
 	      logfactory.update(log, function(err, res){
 	        if(err) return console.log(err);
 	        var index = $scope.logs.indexOf(log);
@@ -30667,15 +30668,16 @@
 	    };
 
 	    $scope.removeLog = function(log){
-	      logfactory.delete(log, function(err, res){
-	        if(err) return console.log(err);
-	        $scope.logs.splice($scope.logs.indexOf(log),1);
-	      })
-	    }
+	      log.editing = false;
+	      var targetIndex = log.index;
+	      $http.patch('/logger/remove', log)
+	      .then(
+	        console.log('fail'),
+	        $scope.getAll()
+	      );
+	    };
 
 	    $scope.cancelEdit = function(log){
-	      log.restaurant = oldRestaurant;
-	      log.item = oldItem;
 	      log.editing = false;
 	    }
 	  }]);

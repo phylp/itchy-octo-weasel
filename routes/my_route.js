@@ -1,4 +1,5 @@
 var Log = require(__dirname + '/../models/log');
+var User = require(__dirname + '/../models/user');
 var express = require('express');
 var jsonParser = require('body-parser').json();
 var errorHandle = require(__dirname + '/../lib/error_handle');
@@ -72,10 +73,12 @@ logRoute.get('/showfavorite', function(req,res){
 })   
 
 logRoute.put('/update', jsonParser, function(req, res){
-  Log.findOne({_id: req.body._id}, function(err, log){
+  console.log(req.body);
+  User.findOne({_id: req.body.userID}, function(err, log){
     if(err) errorHandle(err);
-    if(!!req.body.restaurant) log.restaurant = req.body.restaurant;
-    if(!!req.body.item) log.item = req.body.item;
+    console.log('!!!!!!!!!!!! ' + log)
+    //if(!!req.body.restaurant) log.restaurant = req.body.restaurant;
+    //if(!!req.body-parser.item) log.item = req.body.item;
     log.save(function(err, data){
       if(err){
         errorHandle(err);
@@ -94,15 +97,23 @@ logRoute.post('/send', jsonParser, eatAuth, function(req, res) {
   });
 });
 
-logRoute.delete('/:id', function(req,res){
-  Log.remove({_id: req.params.id}, function(err){
-    if(err){
-      return errorHandle(err, res);
-    }
-    res.json({msg: 'sucessfully deleted'});
+logRoute.patch('/remove', jsonParser, function(req,res){
+  console.log(req.body);
+  var targetName = req.body.username;
+  var targetIndex = req.body.index;
+  var targetString = 'logs.' + targetIndex
+  var projection = {};
+  projection[targetString] = null;
+  User.update({username: targetName}, {$set: projection}, function(err, data){
+    if(err) console.log('dayum');
+    console.dir(data);
   });
+  User.update({username: targetName}, {$pull: {logs: null}}, function(err, data){
+    if(err) console.log('dayum');
+    console.dir(data);
+  });
+  res.end();
 });
-
 
 
 // logRoute.get('/showlogs', function(req,res){
