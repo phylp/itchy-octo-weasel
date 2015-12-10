@@ -70,22 +70,6 @@ logRoute.get('/showfavorite', function(req,res){
       }
       res.send(favorite);
   })
-})   
-
-logRoute.put('/update', jsonParser, function(req, res){
-  console.log(req.body);
-  User.findOne({_id: req.body.userID}, function(err, log){
-    if(err) errorHandle(err);
-    console.log('!!!!!!!!!!!! ' + log)
-    //if(!!req.body.restaurant) log.restaurant = req.body.restaurant;
-    //if(!!req.body-parser.item) log.item = req.body.item;
-    log.save(function(err, data){
-      if(err){
-        errorHandle(err);
-      }
-      res.json(log);
-    })
-  })
 });
 
 logRoute.post('/send', jsonParser, eatAuth, function(req, res) {
@@ -95,13 +79,42 @@ logRoute.post('/send', jsonParser, eatAuth, function(req, res) {
     if (err) handleError(err, res);
     res.json(data);
   });
+});   
+
+// logRoute.put('/update', jsonParser, function(req, res){
+//   console.log(req.body);
+//   User.findOne({_id: req.body.userID}, function(err, log){
+//     if(err) errorHandle(err);
+//     console.log('!!!!!!!!!!!! ' + log)
+//     //if(!!req.body.restaurant) log.restaurant = req.body.restaurant;
+//     //if(!!req.body-parser.item) log.item = req.body.item;
+//     log.save(function(err, data){
+//       if(err){
+//         errorHandle(err);
+//       }
+//       res.json(log);
+//     })
+//   })
+// });
+
+logRoute.patch('/update', jsonParser, function(req, res){
+  var updateName = req.body.username;
+  var updateIndex = req.body.index;
+  var updateString = 'logs.' + updateIndex + '.date';
+  var updateProjection = {};
+  updateProjection[updateString] = req.body.date;
+  User.update({username: updateName}, {$set: updateProjection}, function(err, data){
+    if(err) console.log(err);
+    console.log('update projection worked');
+  })
+  res.json('SUCCESSFULLY UPDATED THE DATE');
 });
 
 logRoute.patch('/remove', jsonParser, function(req,res){
   console.log(req.body);
   var targetName = req.body.username;
   var targetIndex = req.body.index;
-  var targetString = 'logs.' + targetIndex
+  var targetString = 'logs.' + targetIndex;
   var projection = {};
   projection[targetString] = null;
   User.update({username: targetName}, {$set: projection}, function(err, data){

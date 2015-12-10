@@ -13,11 +13,11 @@
               <td data-ng-if = "!log.editing">{{log.item | uc}}</td>
               <td data-ng-if = "!log.editing">{{log.calories}}</td>
               <td data-ng-if = "!log.editing">{{log.date | date: 'mediumDate'}}</td>
-              <td data-ng-if = "log.editing"><input type = "date" data-ng-model = "tempDate.value"></td>
+              <td data-ng-if = "log.editing"><input id = "dateField" type = "date"></td>
               <!-- <td data-ng-if = "log.editing"><input type = "text" data-ng-model = "log.item"></td> -->
               <td>
                 <button class = "myButton" data-ng-if = "!log.editing" data-ng-click = "editDelete(log)">Change Date</button>
-                <button class = "myButton" data-ng-if = "log.editing" data-ng-click = "updateLog(log, tempDate)">Save</button>
+                <button class = "myButton" data-ng-if = "log.editing" data-ng-click = "updateLog(log)">Save</button>
                 <button class = "myButton" data-ng-if = "log.editing" data-ng-click = removeLog(log)>Delete</button>
                 <button class = "myButton" data-ng-if = 'log.editing' data-ng-click = "cancelEdit(log)">CANCEL</button> 
               </td>

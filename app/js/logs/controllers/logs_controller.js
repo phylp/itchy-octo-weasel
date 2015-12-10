@@ -4,9 +4,6 @@ module.exports = function(app){
     $scope.newLog = {};
     $scope.warning;
     $scope.successMsg = '';
-    $scope.tempDate = {
-      value: new Date()
-    } 
 
     var eat = $cookies.get('eat');
     if (!(eat && eat.length))
@@ -53,15 +50,30 @@ module.exports = function(app){
       log.editing = true;
     }
 
+    // $scope.updateLog = function(log){
+    //   log.date = $scope.tempDate;
+    //   console.dir('tempdate: ' + log);
+    //   logfactory.update(log, function(err, res){
+    //     if(err) return console.log(err);
+    //     var index = $scope.logs.indexOf(log);
+    //     $scope.logs.splice($scope.logs[index], 1, res);
+    //     log.editing = false;
+    //   }); 
+    // };
+
     $scope.updateLog = function(log){
-      log.date = tempDate;
-      logfactory.update(log, function(err, res){
-        if(err) return console.log(err);
-        var index = $scope.logs.indexOf(log);
-        $scope.logs.splice($scope.logs[index], 1, res);
-        log.editing = false;
-      }); 
-    };
+      var myTempDate = document.getElementById("dateField").value;
+      alert(myTempDate);
+      var myHeader = {};
+      myHeader.username = log.username;
+      myHeader.index = log.index;
+      myHeader.date = myTempDate;
+      $http.patch('/logger/update', myHeader)
+      .then(
+        console.log('date change failed'),
+        $scope.getAll()
+      )
+    }
 
     $scope.removeLog = function(log){
       log.editing = false;

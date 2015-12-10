@@ -57,7 +57,6 @@ usersRouter.get('/signin', httpBasic, function(req, res){
       console.log('could not authenticate: ' + req.auth.username);
       return res.status(401).json({msg: 'could not authenticate'});
     }
-    console.log('got here');
    ee.emit('compareHash', req, res, user); 
   });
 });
@@ -153,7 +152,6 @@ usersRouter.get('/getuserlogs', jsonParser, eatAuth, function(req, res){
     var initialLogs = user.logs;
     var userID = user._id;
     var userName = req.user.username;
-    console.log('HERE ARE INITIAL LOGS ' + initialLogs)
     ee.emit('initialLogsComplete', initialLogs, userID, userName, req, res);
   });   
 });
@@ -162,8 +160,6 @@ ee.on('initialLogsComplete', function(initialLogs, userID, userName, req, res){
   var secondLogs = [];
   
   function createLogs(){
-    console.log('inside create logs function');
-    console.log('length: ' + initialLogs.length);
     if(initialLogs.length){  
       Food.findOne({_id: initialLogs[0].fooditem}, function(err, data){
         if(err)errorHandle(err);
